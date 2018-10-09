@@ -33,7 +33,7 @@ def Data2String(path):
         # Error Raise For Empty Data
         if TmpRSpace == "":
             continue
-        s = tmp_data[4].replace("\r\n","")+","+tmp_data[0]+","+tmp_data[2]+","+tmp_data[3]
+        s = tmp_data[4].replace("\r\n","")+","+tmp_data[0].replace(",","")+","+tmp_data[2].replace(",","")+","+tmp_data[3]
         json_data = json.loads(TmpRSpace)
         list_data = sorted(json_data.items(), key=lambda d: d[1], reverse=True)
         list_len = len(list_data)
@@ -41,7 +41,7 @@ def Data2String(path):
             if (i+1)>list_len:
                 s=s+","+"none"
             else:
-                s=s+","+list_data[i][0]
+                s=s+","+list_data[i][0].replace(",","")
         for i in range(10):
             if (i+1)>list_len:
                 s=s+","+"0"
