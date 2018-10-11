@@ -16,16 +16,19 @@ import json
 from config import config_util
 
 def save(filename, contents):
-    fh = open(filename, 'w', encoding='utf-8')
+    fh = open(filename, 'a', encoding='utf-8')
     fh.write(contents)
     fh.close()
-def Data2String(path):
+def Data2String(path,start,end,outpath):
 
     File = open(path, 'rb')
     # csv title
-    data="label,keyword,title,tag,s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,w0,w1,w2,w3,w4,w5,w6,w7,w8,w9"
+    data="label,keyword,title,tag,w0,w1,w2,w3,w4,w5,w6,w7,w8,w9,s0,s1,s2,s3,s4,s5,s6,s7,s8,s9"
     JsonIndex = 0
     for line in File:
+        JsonIndex = JsonIndex + 1
+        if JsonIndex <start:
+            continue
         # Read Every Lines
         tmp_data = line.decode('utf-8').split("\t")
         tmp_json = tmp_data[1]
@@ -48,18 +51,24 @@ def Data2String(path):
             else:
                 s=s+","+list_data[i][1]
         data = data+"\n"+s
-        JsonIndex = JsonIndex + 1
-        if JsonIndex%10000==0:
+
+        if JsonIndex%1000==0:
+            save(outpath, data)
+            data = ""
             print(str(JsonIndex))
+        if JsonIndex>=end:
+            break
     # Close Txt
     File.close()
-    return data
+    save(outpath, data)
+    return JsonIndex
 # Main Func
+
 if __name__ == '__main__':
     # Save File Method
     txtpath = config_util.DATA_TXT_BASE
-    data = Data2String(txtpath+'\\oppo_round1_train_20180929.txt')
-    save(txtpath+'\\train.csv',data)
+    data = Data2String(txtpath+'\\oppo_round1_train_20180929.txt',-1,20000000,txtpath+'\\train-all.csv')
+    print(str(data))
 
 
 
