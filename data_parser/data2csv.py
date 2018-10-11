@@ -71,4 +71,8 @@ if __name__ == '__main__':
     print(str(data))
 
 
+    # data = Data2String(txtpath + '/oppo_round1_train_20180929.txt')
+    # save(txtpath + '/train.csv', data)
+
+
 
